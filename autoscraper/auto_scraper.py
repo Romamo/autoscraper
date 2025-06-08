@@ -224,6 +224,9 @@ class AutoScraper(object):
         List of similar results
         """
 
+        if not wanted_list and not (wanted_dict and any(wanted_dict.values())):
+            raise ValueError("No targets were supplied")
+
         soup = self._get_soup(url=url, html=html, request_args=request_args)
 
         result_list = []
