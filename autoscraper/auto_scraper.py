@@ -129,7 +129,7 @@ class AutoScraper(object):
 
         for attr in key_attrs:
             if attr not in attrs:
-                attrs[attr] = ""
+                attrs[attr] = None
         return attrs
 
     @staticmethod
