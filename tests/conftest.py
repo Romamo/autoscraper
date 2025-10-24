@@ -25,14 +25,14 @@ class _Node:
                 result.extend(child.findChildren(recursive))
         return result
 
-    def findParent(self):
+    def find_parent(self):
         return self.parent
 
     def _attr_match(self, child, attrs):
         from autoscraper.utils import FuzzyText
 
         for key, val in (attrs or {}).items():
-            actual = child.attrs.get(key, "")
+            actual = child.attrs.get(key, None)
             if isinstance(actual, list):
                 actual = " ".join(actual)
 
@@ -52,14 +52,14 @@ class _Node:
                 result.extend(child.findAll(name, attrs, recursive))
         return result
 
-    def find_all(self, name=None, attrs=None, text=None, recursive=True):
-        if text:
+    def find_all(self, name=None, attrs=None, string=None, recursive=True):
+        if string:
             res = []
             if self.text.strip():
                 res.append(self.text)
             for child in self.children:
                 if recursive:
-                    res.extend(child.find_all(text=True, recursive=True))
+                    res.extend(child.find_all(string=True, recursive=True))
                 elif child.text.strip():
                     res.append(child.text)
             return res
