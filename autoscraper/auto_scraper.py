@@ -122,14 +122,11 @@ class AutoScraper(object):
 
     @staticmethod
     def _get_valid_attrs(item):
-        key_attrs = {"class", "style"}
+        key_attrs = {"class", "style", "id"}
         attrs = {
             k: v if v != [] else "" for k, v in item.attrs.items() if k in key_attrs
         }
 
-        for attr in key_attrs:
-            if attr not in attrs:
-                attrs[attr] = None
         return attrs
 
     @staticmethod
@@ -723,3 +720,30 @@ class AutoScraper(object):
     def generate_python_code(self):
         # deprecated
         print("This function is deprecated. Please use save() and load() instead.")
+
+    def get_rules_by_alias(self, alias):
+        for stack in self.stack_list:
+            if stack['alias'] == alias:
+                yield stack
+
+    def get_rule(self, stack_id):
+        for stack in self.stack_list:
+            if stack['stack_id'] == stack_id:
+                return stack
+
+    def get_stack_selector(self, stack):
+        items = []
+        for r in stack['content'][1:-1]:
+            if r[1].get('id'):
+                items = []
+                items.append(f"{r[0]}#{r[1]['id']}")
+            else:
+                items.append(r[0])
+
+        last = stack['content'][-1]
+        if last[1].get('class'):
+            items.append(f"{last[0]}[class=\"{' '.join(last[1]['class'])}\"]")
+        else:
+            items.append(last[0])
+        # return 'document.querySelectorAll(\''+' '.join(items)+'\')'
+        return ' '.join(items)
