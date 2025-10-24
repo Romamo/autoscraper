@@ -23,7 +23,7 @@ def unique_hashable(hashable_items):
 
 
 def get_non_rec_text(element):
-    return ''.join(element.find_all(text=True, recursive=False)).strip()
+    return ''.join(element.find_all(string=True, recursive=False)).strip()
 
 
 def normalize(item):

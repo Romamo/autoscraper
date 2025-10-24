@@ -167,8 +167,8 @@ class AutoScraper(object):
 
         return False
 
-    def _get_children(self, soup, text, url, text_fuzz_ratio):
-        children = reversed(soup.findChildren())
+    def _get_children(self, soup: BeautifulSoup, text, url, text_fuzz_ratio):
+        children = reversed(soup.find_all())
         children = [
             x for x in children if self._child_has_text(x, text, url, text_fuzz_ratio)
         ]
@@ -263,11 +263,11 @@ class AutoScraper(object):
 
         parent = child
         while True:
-            grand_parent = parent.findParent()
+            grand_parent = parent.find_parent()
             if not grand_parent:
                 break
 
-            children = grand_parent.findAll(
+            children = grand_parent.find_all(
                 parent.name, cls._get_valid_attrs(parent), recursive=False
             )
             for i, c in enumerate(children):
@@ -341,7 +341,7 @@ class AutoScraper(object):
                 if attr_fuzz_ratio < 1.0:
                     attrs = self._get_fuzzy_attrs(attrs, attr_fuzz_ratio)
 
-                found = parent.findAll(item[0], attrs, recursive=False)
+                found = parent.find_all(item[0], attrs, recursive=False)
                 if not found:
                     continue
 
@@ -370,9 +370,9 @@ class AutoScraper(object):
         return result
 
     def _get_result_with_stack_index_based(
-        self, stack, soup, url, attr_fuzz_ratio, **kwargs
+        self, stack, soup: BeautifulSoup, url, attr_fuzz_ratio, **kwargs
     ):
-        p = soup.findChildren(recursive=False)[0]
+        p = soup.find_all(recursive=False)[0]
         stack_content = stack["content"]
         for index, item in enumerate(stack_content[:-1]):
             if item[0] == "[document]":
@@ -422,7 +422,7 @@ class AutoScraper(object):
         keep_order = kwargs.get("keep_order", False)
 
         if group_by_alias or (keep_order and not grouped):
-            for index, child in enumerate(soup.findChildren()):
+            for index, child in enumerate(soup.find_all()):
                 setattr(child, "child_index", index)
 
         result_list = []
